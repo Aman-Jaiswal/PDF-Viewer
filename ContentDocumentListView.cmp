@@ -1,0 +1,29 @@
+<aura:component implements="lightning:availableForFlowScreens,force:hasRecordId,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="Content_Document_Utility">
+    <aura:attribute type="ContentVersion[]" name="lstContentVersion"/>
+    <aura:attribute name="showTable" type="boolean"/>
+    <aura:attribute name="recId" type="string"/>
+    <aura:attribute name="pageReference" type="Object"/>
+    <aura:attribute name="tabNum" type="integer" default="0"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="sObjName" type="string"/>
+    <aura:attribute name="isRefresh" type="boolean" default="FALSE"/>
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler event="force:showToast" action="{!c.dorefresh}"/>
+    <aura:handler event="force:refreshView" action="{!c.init}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <lightning:card variant="Narrow" title="Document View" iconName="standard:document_preview" footer="">
+        <p class="slds-p-horizontal_small">
+            <aura:if isTrue="{!v.showTable}">
+                <lightning:datatable data="{!v.lstContentVersion}"
+                                     columns="{!v.columns}"
+                                     keyField="Id"
+                                     showRowNumberColumn="true"
+                                     hideCheckboxColumn="true"
+                                     onrowaction="{!c.handleRowAction}"/>
+                <aura:set attribute="else">
+                    No Records
+                </aura:set>
+            </aura:if>
+        </p>
+    </lightning:card>
+</aura:component>
