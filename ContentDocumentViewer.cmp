@@ -1,0 +1,6 @@
+<aura:component implements="lightning:isUrlAddressable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+	<aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:handler name="change" value="{!v.pageReference}" action="{!c.handlePageChange}" />
+    <aura:attribute name="pdfUrl" type="String" description="The person that will be greeted" /> 
+    <iframe src="{!v.pdfUrl}" height="100%" width="100%" title="iFrame"></iframe>
+</aura:component>
