@@ -1,0 +1,24 @@
+public class Content_Document_Utility {
+    @AuraEnabled(cacheable=true)
+    public static List<ContentVersion> getRelatedFilesByRecordId(String recId,string objName) {
+        // Get record file IDs      
+        System.debug('recordId:: '+recId);
+        List<ContentDocumentLink> files = new List<ContentDocumentLink>();
+        if(objName.toLowerCase()=='case'){
+            files = [SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN(SELECT Id FROM EmailMessage WHERE ParentId =:recId)];
+        }else{
+            files = [SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId =:recId];
+        }
+        
+        List<ID> fileIDs = new List<ID>();
+        for (ContentDocumentLink docLink : files) {
+            fileIDs.add(docLink.ContentDocumentId);
+        }
+        
+        // Filter PDF files 
+        List<ContentVersion> docs = [SELECT ContentDocumentId,Owner.Name,LastModifiedDate, ContentSize, Title,VersionDataUrl
+                                     FROM ContentVersion WHERE ContentDocumentId IN : fileIDs];
+        System.debug('docs:: '+docs);
+        return docs;
+    }
+}
